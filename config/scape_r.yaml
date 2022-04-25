@@ -1,0 +1,46 @@
+# dataset params
+dataset:
+  name: scape
+  subset: remeshed
+  type: vts
+  root_dataset: ../../datasets
+  root_train: SCAPE_remeshed
+  root_test: SCAPE_remeshed
+  root_geodist: ../
+  cache_dir: ../cache
+
+# optimizer params
+optimizer:
+  lr: 1e-3
+  b1: 0.9
+  b2: 0.99
+  decay_iter: 100
+  decay_factor: 0.5
+
+training:
+  batch_size: 4
+  epochs: 300
+
+# fmap module params
+fmap:
+  n_fmap: 50  # number of eigenvectors used for fmap
+  n_cfmap: 20
+  k_eig: 128  # number of eigenvectors used for diffusion
+  n_feat: 128
+  C_in: 128
+  lambda_: 100
+  resolvant_gamma: 0.5
+  robust: False
+
+# loss params
+loss:
+  w_gt: True
+  w_ortho: 1
+  w_Qortho: 1
+
+# misc
+misc:
+  cuda: True
+  device: 0
+  checkpoint_interval: 5
+  log_interval: 10
