@@ -18,19 +18,19 @@ We chose to call our network **DUO-FM**, for **D**eep **U**nsupervised **O**rien
 -->
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/nicolasdonati/DUO-FM/master/images/TEASER.png" width="400">
+<img src="images/TEASER.png" width="400">
 </p>
 
 ## Outline
 
-# Feature Extractor 
+### Feature Extractor 
 
 Our method is built upon [DiffusionNet](https://github.com/nmwsharp/diffusion-net), a deep feature extractor
 for 3D surfaces which shows state-of-the-art results for many shape analysis tasks like classification or segmentation.
 We use DiffusionNet to build orientation-aware features that are in turn used for functional map estimation.
 The code for DiffusionNet is stored in `diffusion_net/`.
 
-# Complex Functional Maps
+### Complex Functional Maps
 
 Our method uses [Complex Functional Maps](https://github.com/nicolasdonati/QMaps) to link tangent vector field features
 between source and target shapes. This allows to efficiently impose an orientation-aware loss on the network,
