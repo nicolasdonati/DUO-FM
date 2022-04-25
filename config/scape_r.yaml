@@ -8,6 +8,7 @@ dataset:
   root_test: SCAPE_remeshed
   root_geodist: ../geodist
   cache_dir: cache/
+  with_sym: False  # can be set to True to augment data with symmetric shape randomly
 
 # optimizer params
 optimizer:

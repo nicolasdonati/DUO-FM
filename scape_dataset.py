@@ -16,15 +16,22 @@ from Tools.utils import op_cpl
 class ScapeDataset(Dataset):
     """
     Implementation of shape matching Dataset !WITH VTS! correspondence files (to compute ground-truth).
+    This type of dataset is loaded if config['type'] = 'vts'
     It is called Scape Dataset because historically, SCAPE was re-meshed with vts files to track correspondence
     to the original SCAPE dataset. Any dataset using vts (re-meshed as in
     [Continuous and orientation-preserving correspondences via functional maps, Ren et al. 2018 TOG])
     falls into this category and can therefore be utilized via this class.
 
     ---Parameters:
-    @
-    @
-    @
+    @ root_dir: root folder containing shapes_train and shapes_test folder
+    @ name: name of the dataset. ex: scape-remeshed, or scape-anisotropic
+    @ k_eig: number of Laplace-Beltrami eigenvectors loaded
+    @ n_fmap: number of eigenvectors used for fmap computation
+    @ n_cfmap: number of complex eigenvectors used for complex fmap computation
+    @ with_wks: None if no WKS (C_in <= 3), else the number of WKS descriptors
+    @ use_cache: cache for storing dataset (True by default)
+    @ op_cache_dir: cache for diffusion net operators (from config['dataset']['cache_dir'])
+    @ train: for train or test set
 
     ---At initialisation, loads:
     1) verts, faces and vts
@@ -38,11 +45,10 @@ class ScapeDataset(Dataset):
     3) ground-truth functional map Cgt (obtained with vts files)
     """
 
-    def __init__(self, root_dir, name="remeshed",
+    def __init__(self, root_dir, name="scape-remeshed",
                  k_eig=128, n_fmap=30, n_cfmap=20,
                  with_wks=None, with_sym=False,
                  use_cache=True, op_cache_dir=None,
-                 find_sym=False,
                  train=True):
 
         self.k_eig = k_eig

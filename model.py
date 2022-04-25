@@ -99,7 +99,7 @@ class DQFMNet(nn.Module):
     def __init__(self, cfg):
         super().__init__()
 
-        # feature extractor ###############################################################
+        # feature extractor #
         with_grad=True
 
         self.feature_extractor = DiffusionNet(
@@ -111,14 +111,12 @@ class DQFMNet(nn.Module):
              with_gradient_features=with_grad,
              with_gradient_rotations=with_grad,
         )
-        #self.feature_extractor = SpecConvModule(torch.device(f'cuda:{cfg["misc"]["device"]}'))
-        #self.feature_extractor = get_model()
 
         # regularized fmap
         self.fmreg_net = RegularizedFMNet(lambda_=cfg["fmap"]["lambda_"],
                                           resolvant_gamma=cfg["fmap"]["resolvant_gamma"])
-        self.cfm_net = RegularizedCFMNet(lambda_=cfg["fmap"]["lambda_"],
-                                         resolvant_gamma=cfg["fmap"]["resolvant_gamma"])
+        self.cfmreg_net = RegularizedCFMNet(lambda_=cfg["fmap"]["lambda_"],
+                                            resolvant_gamma=cfg["fmap"]["resolvant_gamma"])
 
         # parameters
         self.n_fmap = cfg["fmap"]["n_fmap"]
@@ -137,38 +135,12 @@ class DQFMNet(nn.Module):
 
         # set features to vertices
         features1, features2 = verts1, verts2
-        # features1, features2 = torch.ones_like(verts1), torch.ones_like(verts2)
         # print(features1.shape, features2.shape)
 
         feat1 = self.feature_extractor(features1, mass1, L=L1, evals=evals1, evecs=evecs1,
                                        gradX=gradX1, gradY=gradY1, faces=faces1).unsqueeze(0)
         feat2 = self.feature_extractor(features2, mass2, L=L2, evals=evals2, evecs=evecs2,
                                        gradX=gradX2, gradY=gradY2, faces=faces2).unsqueeze(0)
-
-
-        # spec conv network (not good at all)
-        #feat1 = self.feature_extractor(features1, evecs1, evals1).unsqueeze(0)
-        #feat2 = self.feature_extractor(features2, evecs2, evals2).unsqueeze(0)
-
-
-        # point net 2 network
-        # sample data
-        #spl1, spl2 = torch.randint(features1.shape[0], (1024,)), torch.randint(features2.shape[0], (1024,))
-        '''
-        spl1 = farthest_point_sample(verts1.unsqueeze(0), 1024).squeeze(0)
-        spl2 = farthest_point_sample(verts2.unsqueeze(0), 1024).squeeze(0)
-#        print(spl1.shape)
-        f1, f2 = (features1[spl1].T).unsqueeze(0), (features2[spl2].T).unsqueeze(0)
-        #print(f1.shape)
-        feat1 = self.feature_extractor(f1).permute(0, 2, 1)
-        feat2 = self.feature_extractor(f2).permute(0, 2, 1)
-
-        evecs1, evecs2 = evecs1[spl1], evecs2[spl2]
-        mass1, mass2 = mass1[spl1], mass2[spl2]
-        '''
-        #########################################################################################################
-
-#        print(feat1.shape)
 
         # predict fmap
         evecs_trans1, evecs_trans2 = evecs1.t()[:self.n_fmap] @ torch.diag(mass1), evecs2.t()[:self.n_fmap] @ torch.diag(mass2)
@@ -186,12 +158,7 @@ class DQFMNet(nn.Module):
         cevals1, cevals2 = batch["shape1"]["cevals"][:self.n_fmap], batch["shape2"]["cevals"][:self.n_fmap]
         #
 
-        # with pointnet sampling
-        #spec_grad1, spec_grad2 = spec_grad1[:, spl1], spec_grad2[:, spl2]
-
         cfeat1, cfeat2 = feat1, feat2  # network features
-        # print(evecs2.shape, C_pred.shape)
-        # cfeat1, cfeat2 = evecs1[:, :self.n_fmap].unsqueeze(0), (evecs2[:, :self.n_fmap] @ C_pred.squeeze(0)).unsqueeze(0)
-        Q_pred = self.cfm_net(cfeat1, cfeat2, spec_grad1, spec_grad2, cevals1, cevals2)
+        Q_pred = self.cfmreg_net(cfeat1, cfeat2, spec_grad1, spec_grad2, cevals1, cevals2)
 
         return C_pred, Q_pred

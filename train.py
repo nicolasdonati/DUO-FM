@@ -102,8 +102,6 @@ def train_net(cfg):
 
             # prepare iteration data
             C_gt = data["C_gt"].unsqueeze(0)
-            #map21 = data["map21"]
-            #gt_partiality_mask12, gt_partiality_mask21 = data["gt_partiality_mask12"], data["gt_partiality_mask21"]
 
             # do iteration
             C_pred, Q_pred = dqfm_net(data)

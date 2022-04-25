@@ -20,9 +20,15 @@ class ShrecDataset(Dataset):
     Any dataset using gt files falls into this category and can therefore be utilized via this class.
 
     ---Parameters:
-    @
-    @
-    @
+    @ root_dir: root folder containing shapes_train and shapes_test folder
+    @ name: name of the dataset. ex: scape-remeshed, or scape-anisotropic
+    @ k_eig: number of Laplace-Beltrami eigenvectors loaded
+    @ n_fmap: number of eigenvectors used for fmap computation
+    @ n_cfmap: number of complex eigenvectors used for complex fmap computation
+    @ with_wks: None if no WKS (C_in <= 3), else the number of WKS descriptors
+    @ use_cache: cache for storing dataset (True by default)
+    @ op_cache_dir: cache for diffusion net operators (from config['dataset']['cache_dir'])
+    @ train: for train or test set
 
     ---At initialisation, loads:
     1) verts, faces and ground-truths
