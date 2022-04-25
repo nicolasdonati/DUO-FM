@@ -3,11 +3,11 @@ dataset:
   name: smal
   subset: remeshed
   type: vts
-  root_dataset: ../../datasets
+  root_dataset: ../datasets
   root_train: SMAL_r
   root_test: SMAL_r
-  root_geodist: ../
-  cache_dir: ../cache
+  root_geodist: ../geodist
+  cache_dir: cache/
 
 # optimizer params
 optimizer:
@@ -18,29 +18,29 @@ optimizer:
   decay_factor: 0.5
 
 training:
-  batch_size: 4
-  epochs: 300
+  batch_size: 1
+  epochs: 30
 
 # fmap module params
 fmap:
   n_fmap: 50  # number of eigenvectors used for fmap
-  n_cfmap: 20
+  n_cfmap: 20 # number of complex eigenvectors used for complex fmap
   k_eig: 128  # number of eigenvectors used for diffusion
-  n_feat: 128
-  C_in: 128
-  lambda_: 100
-  resolvant_gamma: 0.5
+  n_feat: 128 # dimension of output features
+  C_in: 128 # dimension of input features (default:128; if C_in=3, xyz signal will be used; if C_in>3, WKS descs will be used)
+  lambda_: 100 # parameter 1 for Laplacian regularizer layer (default: 100)
+  resolvant_gamma: 0.5 # parameter 2 for Laplacian regularizer layer (default: 0.5)
   robust: False
 
 # loss params
 loss:
-  w_gt: True
-  w_ortho: 1
-  w_Qortho: 1
+  w_gt: False  # if one wants to train as a supervised method, one should set w_gt=True
+  w_ortho: 1   # orthogonal loss for functional map (default: 1)
+  w_Qortho: 1  # orthogonal loss for complex functional map (default: 1)
 
 # misc
 misc:
   cuda: True
   device: 0
   checkpoint_interval: 5
-  log_interval: 10
+  log_interval: 500

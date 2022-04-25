@@ -6,7 +6,11 @@ a Shape Matching Network that builds comprehensive orientation-aware features fr
 to compute accurate correspondence between pairs of shapes.
 Our method exploits both scalar-valued and vector-valued features to infer well-oriented maps between shapes,
 **in a fully unsupervised manner**.
+
 We chose to call our network **DUO-FM**, for **D**eep **U**nsupervised **O**rientation-aware **F**unctional **M**aps.
+Another reason for this name is that this network relies on the computation of two maps: the functional map
+for scalar-valued descriptors and the complex functional map for vector-valued descriptors. It is this joint estimation
+of both these maps that makes our method robust and able to retrieve orientation-preserving maps without supervision.
 
 > **DUO-FM, Deep orientation-aware functional maps**<br/>
 > Nicolas Donati, Etienne Corman, Maks Ovsjanikov<br/>

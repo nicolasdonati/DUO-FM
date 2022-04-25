@@ -1,11 +1,11 @@
 # dataset params
 dataset:
   name: scape
-  subset: remeshed
+  subset: aniso
   type: vts
   root_dataset: ../datasets
-  root_train: SCAPE_remeshed
-  root_test: SCAPE_remeshed
+  root_train: SCAPE_aniso
+  root_test: SCAPE_aniso
   root_geodist: ../geodist
   cache_dir: cache/
 

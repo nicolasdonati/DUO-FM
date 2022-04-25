@@ -1,11 +1,11 @@
 # dataset params
 dataset:
-  name: scape
+  name: shrec
   subset: remeshed
-  type: vts
+  type: gt
   root_dataset: ../datasets
-  root_train: SCAPE_remeshed
-  root_test: SCAPE_remeshed
+  root_train: SHREC_clean
+  root_test: SHREC_clean
   root_geodist: ../geodist
   cache_dir: cache/
 
