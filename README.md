@@ -47,10 +47,18 @@ Our code depends on pytorch (>1.8), as well as a handful of other fairly typical
 which can usually be installed manually.
 
 ## How to use
--specify your dataset and model parameters in a `config/your_config.yaml` file.
--run `python train.py --config your_train_config` to train **DUO-FM** on your train set with your parameters.
--run `python train.py --model_path path/to/your/model --config your_test_config` to test **DUO-FM** on your test set
-with your parameters.
+To use our method, follow the following steps:
+
+- Specify your dataset and model parameters in a `config/your_config.yaml` file. Examples for the config file are
+displayed in `config`. The main requirements are the paths to your dataset and some parameters (e.g. number of 
+eigenfunctions, number of output descriptors, number of epochs for training, ...).
+- Run `python train.py --config your_train_config` to train **DUO-FM** on your train set with your parameters.
+Images of a) the predicted functional map b) the predicted complex functional map c) the ground truth functional 
+map for comparison are saved at `img/`. These images can be used to check that the model gets the maps right
+after some epochs.
+- Run `python train.py --model_path path/to/your/model --config your_test_config` to test **DUO-FM** on your test set
+with your parameters. If geodesic distance matrices are available (through the config file), the eval code will
+display geodesic errors after each test pair map is computed.
 
 ## Citation
 If you use our work, please cite our paper.
@@ -62,6 +70,9 @@ If you use our work, please cite our paper.
   year={2022}
 }
 ```
+
+## Thanks
+Parts of this work were supported by the ERC Starting Grant No. 758800 (EXPROTEA) and the ANR AI Chair AIGRETTE.
 
 ## Contact
 If you have any problem about this implementation, please feel free to contact via:
