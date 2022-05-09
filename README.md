@@ -15,8 +15,8 @@ of both these maps that makes our method robust and able to retrieve orientation
 > **DUO-FM, Deep orientation-aware functional maps**<br/>
 > Nicolas Donati, Etienne Corman, Maks Ovsjanikov<br/>
 > In *CVPR 2022*<br/>
+> [PDF](https://arxiv.org/abs/2204.13453.pdf)<br/>
 <!--
-> [PDF](https://arxiv.org/pdf/2112.09546.pdf)
 > [Video](https://www.youtube.com/watch?v=U6wtw6W4x3I),
 > [Project page](http://igl.ethz.ch/projects/instant-meshes/)
 -->
