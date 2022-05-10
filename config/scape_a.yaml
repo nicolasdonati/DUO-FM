@@ -3,10 +3,10 @@ dataset:
   name: scape
   subset: aniso
   type: vts
-  root_dataset: ../datasets
-  root_train: SCAPE_aniso
-  root_test: SCAPE_aniso
-  root_geodist: ../geodist
+  root_dataset: data/
+  root_train: SCAPE_a/
+  root_test: SCAPE_a/
+  root_geodist: geodist/
   cache_dir: cache/
 
 # optimizer params

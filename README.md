@@ -56,9 +56,9 @@ eigenfunctions, number of output descriptors, number of epochs for training, ...
 Images of a) the predicted functional map b) the predicted complex functional map c) the ground truth functional 
 map for comparison are saved at `img/`. These images can be used to check that the model gets the maps right
 after some epochs.
-- Run `python train.py --model_path path/to/your/model --config your_test_config` to test **DUO-FM** on your test set
-with your parameters. If geodesic distance matrices are available (through the config file), the eval code will
-display geodesic errors after each test pair map is computed.
+- Run `python eval.py --model_path path/to/your/model --config your_test_config` to test **DUO-FM** on your test set
+with your parameters. If geodesic distance matrices are available (precise the path through the config file),
+the eval code will display geodesic errors after each test map is computed.
 
 ## Citation
 If you use our work, please cite our paper.

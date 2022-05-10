@@ -3,10 +3,10 @@ dataset:
   name: smal
   subset: remeshed
   type: vts
-  root_dataset: ../datasets
-  root_train: SMAL_r
-  root_test: SMAL_r
-  root_geodist: ../geodist
+  root_dataset: data/
+  root_train: SMAL_r/
+  root_test: SMAL_r/
+  root_geodist: geodist/
   cache_dir: cache/
 
 # optimizer params

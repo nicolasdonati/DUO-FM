@@ -3,10 +3,10 @@ dataset:
   name: scape
   subset: remeshed
   type: vts
-  root_dataset: ../datasets
-  root_train: SCAPE_remeshed
-  root_test: SCAPE_remeshed
-  root_geodist: ../geodist
+  root_dataset: data/
+  root_train: SCAPE_r/
+  root_test: SCAPE_r/
+  root_geodist: geodist/
   cache_dir: cache/
   with_sym: False  # can be set to True to augment data with symmetric shape randomly
 

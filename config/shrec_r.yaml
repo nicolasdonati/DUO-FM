@@ -3,10 +3,10 @@ dataset:
   name: shrec
   subset: remeshed
   type: gt
-  root_dataset: ../datasets
-  root_train: SHREC_clean
-  root_test: SHREC_clean
-  root_geodist: ../geodist
+  root_dataset: data/
+  root_train: SHREC_clean/
+  root_test: SHREC_clean/
+  root_geodist: geodist/
   cache_dir: cache/
 
 # optimizer params

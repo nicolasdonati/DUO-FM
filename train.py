@@ -4,7 +4,6 @@ import os
 import torch
 from scape_dataset import ScapeDataset, shape_to_device
 from shrec_dataset import ShrecDataset, shape_to_device
-from sym_dataset import SymDataset, shape_to_device
 from model import DQFMNet
 from utils import DQFMLoss, augment_batch, augment_batch_sym
 #
@@ -33,26 +32,15 @@ def train_net(cfg):
     # decide on the use of WKS descriptors
     with_wks = None if cfg["fmap"]["C_in"] <= 3 else cfg["fmap"]["C_in"]
 
-    # is it a dataset to find self-symmetries
-    find_sym = False if not "find_sym" in cfg["dataset"] else cfg["dataset"]["find_sym"]
-
     # create dataset
-    # dataset to find self symmetries
-    if find_sym:
-        train_dataset = SymDataset(dataset_path, name=cfg["dataset"]["name"] + "-" + cfg["dataset"]["subset"],
-                                   k_eig=cfg["fmap"]["k_eig"],
-                                   n_fmap=cfg["fmap"]["n_fmap"], n_cfmap=cfg["fmap"]["n_cfmap"],
-                                   with_wks=with_wks, with_sym=cfg["dataset"]["with_sym"],
-                                   use_cache=True, op_cache_dir=op_cache_dir)
 
     # standard structured (source <> target) vts dataset
-    elif cfg["dataset"]["type"] == "vts":
+    if cfg["dataset"]["type"] == "vts":
         train_dataset = ScapeDataset(dataset_path, name=cfg["dataset"]["name"]+"-"+cfg["dataset"]["subset"],
                                      k_eig=cfg["fmap"]["k_eig"],
                                      n_fmap=cfg["fmap"]["n_fmap"], n_cfmap=cfg["fmap"]["n_cfmap"],
                                      with_wks=with_wks, with_sym=cfg["dataset"]["with_sym"],
-                                     use_cache=True, op_cache_dir=op_cache_dir,
-                                     find_sym=find_sym)
+                                     use_cache=True, op_cache_dir=op_cache_dir, train=True)
 
     # standard structured (source <> target) dataset with gt
     elif cfg["dataset"]["type"] == "gt":
@@ -97,8 +85,7 @@ def train_net(cfg):
                                      std=0.01, noise_clip=0.05,
                                      scale_min=0.9, scale_max=1.1)
             elif "with_sym" in cfg["dataset"] and cfg["dataset"]["with_sym"]:
-                data = augment_batch_sym(data, rand=not find_sym)
-                #data = augment_batch_sym(data, rand=False) #always symmetrize
+                data = augment_batch_sym(data, rand=False)  # always symmetrize
 
             # prepare iteration data
             C_gt = data["C_gt"].unsqueeze(0)
@@ -116,7 +103,7 @@ def train_net(cfg):
 
             log_batch = (i + 1) % cfg["misc"]["log_interval"] == 0
             log_iter = (iterations + 1) % cfg["misc"]["log_interval"] == 0
-            if log_batch or (find_sym and log_iter):
+            if log_batch:
                 print(f"#epoch:{epoch}, #batch:{i + 1}, #iteration:{iterations}, loss:{loss}")
                 print("#gt:{:06.4f} | #o:{:06.4f} | #Qo:{:06.4f}".format(criterion.gt_loss,
                                                                          criterion.ortho_loss,

@@ -4,7 +4,6 @@ import os
 import torch
 from scape_dataset import ScapeDataset, shape_to_device
 from shrec_dataset import ShrecDataset, shape_to_device
-from sym_dataset import SymDataset, shape_to_device
 from model import DQFMNet
 #
 import numpy as np
@@ -53,20 +52,8 @@ def eval_net(args, model_path, predictions_name):
     # decide on the use of WKS descriptors
     with_wks = None if cfg["fmap"]["C_in"] <= 3 else cfg["fmap"]["C_in"]
 
-    # is it a dataset to find self-symmetries
-    find_sym = False if not "find_sym" in cfg["dataset"] else cfg["dataset"]["find_sym"]
-    # print(find_sym)
-
     # create dataset
-    if find_sym:
-        test_dataset = SymDataset(dataset_path, name=cfg["dataset"]["name"]+"-"+cfg["dataset"]["subset"],
-                                  k_eig=cfg["fmap"]["k_eig"],
-                                  n_fmap=cfg["fmap"]["n_fmap"], n_cfmap=cfg["fmap"]["n_cfmap"],
-                                  with_wks=with_wks, with_sym=cfg["dataset"]["with_sym"],
-                                  use_cache=True, op_cache_dir=op_cache_dir,
-                                  train=False)
-
-    elif cfg["dataset"]["type"] == "vts":
+    if cfg["dataset"]["type"] == "vts":
         test_dataset = ScapeDataset(dataset_path, name=cfg["dataset"]["name"] + "-" + cfg["dataset"]["subset"],
                                     k_eig=cfg["fmap"]["k_eig"],
                                     n_fmap=cfg["fmap"]["n_fmap"], n_cfmap=cfg["fmap"]["n_cfmap"],
