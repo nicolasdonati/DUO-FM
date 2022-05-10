@@ -5,9 +5,6 @@ import torch.nn.functional as F
 
 # feature extractor
 from diffusion_net.layers import DiffusionNet
-from spectral_net.specConv import SpecConvModule
-from point_net2.pointnet2_sem_seg import get_model
-from point_net2.pointnet2_utils import farthest_point_sample
 
 # maps block
 from utils import get_mask, nn_interpolate

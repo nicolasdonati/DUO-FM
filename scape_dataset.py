@@ -58,7 +58,6 @@ class ScapeDataset(Dataset):
         self.cache_dir = root_dir
         self.op_cache_dir = op_cache_dir
         self.with_sym = with_sym
-        self.find_sym = find_sym
 
         # check the cache
         split = "train" if train else "test"
@@ -90,10 +89,7 @@ class ScapeDataset(Dataset):
                     self.vts_list
                 ) = torch.load(load_cache)
 
-                if self.find_sym:
-                    self.combinations = list(range(len(self.verts_list)))
-                else:
-                    self.combinations = list(permutations(range(len(self.verts_list)), 2))
+                self.combinations = list(permutations(range(len(self.verts_list)), 2))
                 return
             print("  --> dataset not in cache, repopulating")
 
@@ -102,11 +98,8 @@ class ScapeDataset(Dataset):
         shapes_split = "shapes_" + split
         self.used_shapes = sorted([x.stem for x in (Path(root_dir) / shapes_split).iterdir() if 'DS_' not in x.stem])
 
-        # set combinations (if we only want to find self-symmetries)
-        if self.find_sym:
-            self.combinations = list(range(len(self.used_shapes)))
-        else:
-            self.combinations = list(permutations(range(len(self.used_shapes)), 2))
+        # set combinations
+        self.combinations = list(permutations(range(len(self.used_shapes)), 2))
 
         #
         mesh_dirpath = Path(root_dir) / shapes_split
@@ -226,10 +219,7 @@ class ScapeDataset(Dataset):
     def __getitem__(self, idx):
 
         # get indexes
-        if self.find_sym:
-            idx1, idx2 = idx, idx
-        else:
-            idx1, idx2 = self.combinations[idx]
+        idx1, idx2 = self.combinations[idx]
 
         # if augmentation with symmetries, get vts list and vts sym list
         if self.with_sym and len(self.vts_list) == 2:
