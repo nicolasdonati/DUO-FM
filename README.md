@@ -22,7 +22,7 @@ of both these maps that makes our method robust and able to retrieve orientation
 -->
 
 <p align="center">
-<img src="images/TEASER.png" width="400">
+<img src="img/TEASER.png" width="400">
 </p>
 
 ## Outline
@@ -49,14 +49,60 @@ which can usually be installed manually.
 ## How to use
 To use our method, follow the following steps:
 
-- Specify your dataset and model parameters in a `config/your_config.yaml` file. Examples for the config file are
+### Configuration
+Specify your dataset and model parameters in a `config/your_config.yaml` file. Examples for the config file are
 displayed in `config`. The main requirements are the paths to your dataset and some parameters (e.g. number of 
 eigenfunctions, number of output descriptors, number of epochs for training, ...).
-- Run `python train.py --config your_train_config` to train **DUO-FM** on your train set with your parameters.
+
+More specifically, here are the **main** things you need to set in your `config` file :
+```bash
+├── dataset
+│   ├── name         # the name of your dataset (e.g. scape)
+│   ├── subset       # the category (e.g. type of remeshing, remeshed or anisotropic, etc...)
+│   ├── type         # vts (uses vts correspondence files) or gt (uses groundtruth files) are the two types supported
+│   ├── root_train   # root to your data (e.g. data/SCAPE_r) do not include 'shapes_train'
+│   ├── root_test    # same root to data (e.g. data/SCAPE_r) do not include 'shapes_test'
+│   ├── root_geodist # root to geodesic distance matrices (only needed for geodesic error eval)
+│   ├── cache_dir    # cache for geometric operator used by diffusion net
+├── optimizer        # optimizer parameters (no need to change them for first tests)
+├── training
+│   ├── batch_size   # always 1 for now, because shapes have different numbers of points
+│   ├── epochs       # number of training epochs (e.g. 30)
+├── fmap
+│   ├── n_fmap       # number of eigenvectors used for fmap (e.g. 50 in the paper)
+│   ├── n_cfmap      # number of complex eigenvectors used for complex fmap (e.g. 20 in the paper)
+│   ├── k_eig        # number of eigenvectors used for diffusion (e.g. 128 in the paper)
+│   ├── n_feat       # dimension of output features (e.g. 128 in the paper)
+│   ├── C_in: 128    # dimension of input features (e.g. 128 in the paper)
+│                    # if C_in=3, xyz signal will be used; if C_in>3, WKS descs will be used
+├── loss
+│   ├── w_gt         # (default: False) if one wants to train as a supervised method, one should set w_gt=True.
+│   ├── w_ortho      # (default: 1) orthogonal loss coefficient for functional map
+│   ├── w_Qortho     # (default: 1) orthogonal loss coefficient for complex functional map
+├── misc             # cuda parameters and checkpoint frequency
+```
+
+It is interesting to note that you can train a **supervised version of the network** with this code,
+by simply setting `w_gt: True` in the `loss` section of the `config` file.
+This implements **Deep Geometric Functional Maps: Robust Feature Learning for Shape Correspondence**
+(find the paper [here](https://arxiv.org/abs/2003.14286.pdf)), with the
+difference that the feature extractor in this case is Diffusion Net.
+
+The purpose of this paper is to propose an **unsupervised deep shape matching method**, which you get
+by simply setting `w_gt: False` in the `loss` section of the `config` file. This implements **DUO-FM**.
+
+### training
+Run `python train.py --config your_train_config` to train **DUO-FM** on your train set with your parameters.
+
 Images of a) the predicted functional map b) the predicted complex functional map c) the ground truth functional 
-map for comparison are saved at `img/`. These images can be used to check that the model gets the maps right
-after some epochs.
-- Run `python eval.py --model_path path/to/your/model --config your_test_config` to test **DUO-FM** on your test set
+map for comparison are saved at `img/`.
+These images can be used to check that the model gets the maps right after some epochs.
+<p align="center">
+<img src="img/TEASER.png" width="500">
+</p>
+
+### testing
+Run `python eval.py --model_path path/to/your/model --config your_test_config` to test **DUO-FM** on your test set
 with your parameters. If geodesic distance matrices are available (precise the path through the config file),
 the eval code will display geodesic errors after each test map is computed.
 
