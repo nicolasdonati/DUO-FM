@@ -59,7 +59,7 @@ More specifically, here are the **main** things you need to set in your `config`
 ├── dataset
 │   ├── name         # the name of your dataset (e.g. scape)
 │   ├── subset       # the category (e.g. type of remeshing, remeshed or anisotropic, etc...)
-│   ├── type         # vts (uses vts correspondence files) or gt (uses groundtruth files) are the two types supported
+│   ├── type_        # vts (uses vts correspondence files) or gt (uses groundtruth files) are the two types supported
 │   ├── root_train   # root to your data (e.g. data/SCAPE_r) do not include 'shapes_train'
 │   ├── root_test    # same root to data (e.g. data/SCAPE_r) do not include 'shapes_test'
 │   ├── root_geodist # root to geodesic distance matrices (only needed for geodesic error eval)
@@ -98,7 +98,7 @@ Images of a) the predicted functional map b) the predicted complex functional ma
 map for comparison are saved at `img/`.
 These images can be used to check that the model gets the maps right after some epochs.
 <p align="center">
-<img src="img/TEASER.png" width="500">
+<img src="img/maps_log.png" width="500">
 </p>
 
 ### testing
