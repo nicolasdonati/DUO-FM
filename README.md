@@ -50,6 +50,7 @@ which can usually be installed manually.
 To use our method, follow the following steps:
 
 ### Configuration
+[Here](https://nuage.lix.polytechnique.fr/index.php/s/LJFXrsTG22wYCXx) is the training data we used.
 Specify your dataset and model parameters in a `config/your_config.yaml` file. Examples for the config file are
 displayed in `config`. The main requirements are the paths to your dataset and some parameters (e.g. number of 
 eigenfunctions, number of output descriptors, number of epochs for training, ...).
